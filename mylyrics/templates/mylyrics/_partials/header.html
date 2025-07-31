@@ -1,0 +1,8 @@
+<header>
+    {% if user.is_authenticated %}
+    <form method="post" action="{% url 'mylyrics:logout' %}">
+        {% csrf_token %}
+        {% include "mylyrics/_partials/button.html" with bgcolor="red" txtcolor="white" label="Logout" %}
+    </form>
+    {% endif %}
+</header>
