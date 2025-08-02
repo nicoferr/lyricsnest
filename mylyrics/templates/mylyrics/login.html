@@ -14,7 +14,11 @@
                 {% endfor %}
             </div>
         {% endfor %}
-        <div class="text-blue-500 mb-4"><a href='{% url "signup" %}'>Don't have an account ? Sign up here</a></div>
-        {% include "mylyrics/_partials/button.html" with bgcolor="blue" txtcolor="white" label="Log in" %}
+        <div class="text-blue-500 mb-4"><a href='{% url "mylyrics:signup" %}'>Don't have an account ? Sign up here</a></div>
+        
+        <button 
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
+        >Log in</button>
+
     </form>
 {% endblock %}

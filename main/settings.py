@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "widget_tweaks",
     'tailwind',
     'theme',
-    "widget_tweaks",
 ]
 
 MIDDLEWARE = [
@@ -141,9 +141,9 @@ if DEBUG:
     NPM_BIN_PATH = 'npm.cmd'
 
 # AUTH
-LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "dashboard"
-LOGOUT_REDIRECT_URL = "login"
+LOGIN_URL = "mylyrics:login"
+LOGIN_REDIRECT_URL = "mylyrics:dashboard"
+LOGOUT_REDIRECT_URL = "mylyrics:login"
 
 
 # STYLE
