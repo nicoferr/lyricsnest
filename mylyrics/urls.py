@@ -11,4 +11,6 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page="mylyrics:login"), name="logout"),
     path('dashboard/', login_required(views.DashboardView.as_view()), name="dashboard"),
     path('songs/create/', login_required(views.create_song), name="create-song"),
+    path('songs/<int:pk>/edit', login_required(views.edit_song), name="edit-song"),
+    path('songs/<int:pk>/delete', login_required(views.delete_song), name="delete-song"),
 ]

@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.utils import timezone
+from django.urls import reverse
 from .models import Song
 from .forms import SongForm
 
@@ -45,4 +46,28 @@ def create_song(request):
             return redirect('mylyrics:dashboard')  # ou autre vue
     else:
         form = SongForm()
-    return render(request, 'mylyrics/songs/create.html', {'form': form})
+    return render(request, 'mylyrics/songs/form.html', {'form': form, 'form_action': reverse('mylyrics:create-song')})
+
+
+@login_required
+def edit_song(request, pk):
+    song = get_object_or_404(Song, pk=pk)
+    if request.method == 'POST':
+        form = SongForm(request.POST, instance=song)
+        if form.is_valid():
+            song = form.save(commit=False)
+            song.user = request.user
+            song.save()
+
+            return redirect('mylyrics:dashboard')  # ou autre vue
+    else:
+        form = SongForm(instance=song)
+    return render(request, 'mylyrics/songs/form.html', {'form': form, 'form_action': reverse('mylyrics:edit-song', args=[song.pk])})
+
+@login_required
+def delete_song(request, pk):
+    song = get_object_or_404(Song, pk=pk)
+
+    song.delete()
+
+    return redirect('mylyrics:dashboard')  # ou autre vue

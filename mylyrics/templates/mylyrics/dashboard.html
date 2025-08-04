@@ -10,7 +10,13 @@
     </a>
 
     {% for song in songs %}
-        <div>{{ song.title }} - {{ song.created_at | date:"d-m-Y" }}</div>
+        <div class="flex">
+            <span>
+                {{ song.title }} - {{ song.created_at | date:"d-m-Y" }}
+            </span>
+            <a href="{% url 'mylyrics:edit-song' pk=song.id %}"><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer">Edit</button></a>
+            <a href="{% url 'mylyrics:delete-song' pk=song.id %}" onclick="return confirm('Delete this lyrics ?')"><button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer">Delete</button></a>
+        </div>
     {% endfor %}
 
 {% endblock %}

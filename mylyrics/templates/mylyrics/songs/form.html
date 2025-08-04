@@ -4,8 +4,8 @@
 {% load widget_tweaks %}
 
 {% block content %}
-<h2>Create a song</h2>
-<form method="post">
+<h2>{{ form.instance.pk|yesno:'Update a song,Create a song' }}</h2>
+<form method="post" action="{{ form_action }}">
     {% csrf_token %}
     {% for field in form %}
         <div class="mb-4">
@@ -19,14 +19,15 @@
 
     <button 
         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
-    >Create</button>
+    >{{ form.instance.pk|yesno:'Update,Create' }}</button>
+    
+    <a href="{% url 'mylyrics:dashboard' %}">
+        <button type="button"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
+        >Cancel</button>
+    </a>
 </form>
 
-    <a href="{% url 'mylyrics:dashboard' %}">
         
-    <button 
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
-    >Cancel</button>
         
-    </a>
 {% endblock %}
