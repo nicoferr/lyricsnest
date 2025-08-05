@@ -13,4 +13,7 @@ urlpatterns = [
     path('songs/create/', login_required(views.create_song), name="create-song"),
     path('songs/<int:pk>/edit', login_required(views.edit_song), name="edit-song"),
     path('songs/<int:pk>/delete', login_required(views.delete_song), name="delete-song"),
+    path('import/', login_required(views.import_lyrics), name="import"),
+    path('generate/', login_required(views.generate), name="generate"),
+    path('generate/<int:pk>', login_required(views.generate), name="edit-generate")
 ]

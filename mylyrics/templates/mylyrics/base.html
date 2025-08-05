@@ -10,11 +10,11 @@
     <title>{% block title %}My Lyrics{% endblock %}</title>
     {% block stylesheets %}{% endblock %}
 </head>
-<body class="bg-gray-50 text-black font-serif leading-normal tracking-normal">
+<body class="bg-gray-100 text-black font-serif leading-normal tracking-normal">
     <div class="container mx-auto">
         <section class="flex flex-col items-center h-screen">
             {% include 'mylyrics/_partials/header.html' %}
-            <div class="flex flex-col items-center h-full">
+            <div class="flex flex-col items-center h-full w-full">
                 {% block content %}
                 {% endblock %}
             </div>

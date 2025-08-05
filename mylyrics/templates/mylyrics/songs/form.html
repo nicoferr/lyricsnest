@@ -4,7 +4,7 @@
 {% load widget_tweaks %}
 
 {% block content %}
-<h2>{{ form.instance.pk|yesno:'Update a song,Create a song' }}</h2>
+<h2 class="text-3xl font-semibold">{{ form.instance.pk|yesno:'Update,Create' }} your lyrics</h2>
 <form method="post" action="{{ form_action }}">
     {% csrf_token %}
     {% for field in form %}
@@ -26,6 +26,14 @@
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
         >Cancel</button>
     </a>
+    <a href="{% if form.instance.pk %}{% url 'mylyrics:edit-generate' pk=form.instance.pk %}{% else %}{% url 'mylyrics:generate' %}{% endif %}">
+        <button type="button" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer">Generate</button>
+    </a>
+    {% if form.instance.pk %}
+        <a href="{% url 'mylyrics:delete-song' pk=form.instance.pk %}" onclick="return confirm('Delete this lyrics ?')">
+            <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer">Delete</button>
+        </a>
+    {% endif %}
 </form>
 
         

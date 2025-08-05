@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.urls import reverse
 from .models import Song
 from .forms import SongForm
+import re
 
 # Create your views here.
 def index(request):
@@ -71,3 +72,30 @@ def delete_song(request, pk):
     song.delete()
 
     return redirect('mylyrics:dashboard')  # ou autre vue
+
+@login_required
+def import_lyrics(request):
+    if(request.method == 'POST'):
+        uploaded_file = request.FILES.get('file')
+
+        if uploaded_file and uploaded_file.name.endswith('.txt'):
+            title = uploaded_file.name[:-4]
+            lyrics = uploaded_file.read().decode('utf-8', errors="replace")
+
+            lyrics = re.sub(r'\n\s*\n+', '\n\n', lyrics)
+
+            Song.objects.create(
+                title = title.strip(),
+                lyrics = lyrics.strip(),
+                user = request.user
+            )
+
+    return redirect('mylyrics:dashboard')
+
+@login_required
+def generate(request, pk=None):
+    song = None
+    if pk:
+        song = get_object_or_404(Song, pk=pk)
+
+    return render(request, 'mylyrics/songs/generate.html', { 'song': song })

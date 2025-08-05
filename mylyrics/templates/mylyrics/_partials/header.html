@@ -1,27 +1,31 @@
-<header class="w-full sticky top-0 flex items-center justify-center p-8">
+<header class="w-full sticky top-0 flex items-center justify-center p-2 mb-10 border-b-2 border-gray-400">
 
-    <a  href="{% url 'mylyrics:home' %}"
-        class="{% if request.resolver_match.url_name == 'home' %}bg-blue-200{% endif %} rounded-xs font-semibold p-2"    
-    >Home</a>
-
-    {% if user.is_authenticated %}
+    <h1 class="text-3xl font-bold">LyricsNest</h1>
     
-        <a  href="{% url 'mylyrics:dashboard' %}"
-            class="{% if request.resolver_match.url_name == 'dashboard' %}bg-blue-200{% endif %} rounded-xs font-semibold p-2"    
-        >Dashboard</a>
+    <div class="flex items-center justify-end w-full">
+        <a  href="{% url 'mylyrics:home' %}"
+            class="{% if request.resolver_match.url_name == 'home' %}bg-blue-200{% endif %} rounded-xs font-semibold p-2 mx-4"    
+        >Home</a>
 
-        <form method="post" action="{% url 'mylyrics:logout' %}">
-            {% csrf_token %}
-            <button 
-                class="font-semibold p-2 rounded-xs cursor-pointer"
-            >Logout</button>
-        </form>
-    {% else %}
-        <a  href="{% url 'mylyrics:signup' %}"
-            class="{% if request.resolver_match.url_name == 'signup' %}bg-blue-200{% endif %} rounded-xs font-semibold p-2"    
-        >Sign up</a>
-        <a href="{% url 'mylyrics:login' %}"
-            class="{% if request.resolver_match.url_name == 'login' %}bg-blue-200{% endif %} rounded-xs font-semibold p-2"    
-        >Log in</a>
-    {% endif %}
+        {% if user.is_authenticated %}
+        
+            <a  href="{% url 'mylyrics:dashboard' %}"
+                class="{% if request.resolver_match.url_name == 'dashboard' %}bg-blue-200{% endif %} rounded-xs font-semibold p-2 mx-4"    
+            >Dashboard</a>
+
+            <form method="post" action="{% url 'mylyrics:logout' %}">
+                {% csrf_token %}
+                <button 
+                    class="font-semibold p-2 rounded-xs cursor-pointer p-2 mx-2"
+                >Logout</button>
+            </form>
+        {% else %}
+            <a  href="{% url 'mylyrics:signup' %}"
+                class="{% if request.resolver_match.url_name == 'signup' %}bg-blue-200{% endif %} rounded-xs font-semibold p-2 mx-4"    
+            >Sign up</a>
+            <a href="{% url 'mylyrics:login' %}"
+                class="{% if request.resolver_match.url_name == 'login' %}bg-blue-200{% endif %} rounded-xs font-semibold p-2 mx-4"    
+            >Log in</a>
+        {% endif %}
+    </div>
 </header>
