@@ -5,8 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.utils import timezone
 from django.urls import reverse
+from django.http import JsonResponse
 from .models import Song
-from .forms import SongForm
+from .forms import SongForm, GenerateForm
 import re
 
 # Create your views here.
@@ -98,4 +99,21 @@ def generate(request, pk=None):
     if pk:
         song = get_object_or_404(Song, pk=pk)
 
-    return render(request, 'mylyrics/songs/generate.html', { 'song': song })
+    form = GenerateForm()
+    form.fields['genres'].choices = [
+        (None, 'None'),
+        ('Country','Country'),
+        ('Hip-Hop/Rap','Hip-Hop/Rap'),
+        ('Jazz','Jazz'),
+        ('Metal','Metal'),
+        ('Pop','Pop'),
+        ('R&B/Soul','R&B/Soul'),
+        ('Reggae','Reggae'),
+        ('Reggaeton','Reggaeton'),
+        ('Rock','Rock'),
+    ]
+    if song:
+        form.fields['lyrics'].initial = song.lyrics[:2000]
+
+    return render(request, 'mylyrics/songs/generate.html', { 'song': song, 'form': form })
+

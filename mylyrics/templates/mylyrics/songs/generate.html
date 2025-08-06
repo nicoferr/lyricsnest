@@ -9,6 +9,11 @@
 <div class="flex w-full">
     <div class="w-full border-1">
         <!-- FORMULAIRE -->
+         <form>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Valider</button>
+         </form>
     </div>
     <div class="w-full border-1">
         <!-- RESULTAT -->
