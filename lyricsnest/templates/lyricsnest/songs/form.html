@@ -1,0 +1,41 @@
+{% extends "lyricsnest/base.html" %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<h2 class="text-3xl font-semibold">{{ form.instance.pk|yesno:'Update,Create' }} your lyrics</h2>
+<form method="post" action="{{ form_action }}">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="mb-4">
+            {{ field.label_tag }}
+            {{ field|add_class:"border rounded w-full p-2" }}
+            {% if field.errors %}
+                <p class="text-red-500 text-sm">{{ field.errors }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <button 
+        class="btn btn-green"
+    >{{ form.instance.pk|yesno:'Update,Create' }}</button>
+    
+    <a href="{% url 'lyricsnest:dashboard' %}">
+        <button type="button"
+            class="btn btn-blue"
+        >Cancel</button>
+    </a>
+    <a href="{% if form.instance.pk %}{% url 'lyricsnest:edit-generate' pk=form.instance.pk %}{% else %}{% url 'lyricsnest:generate' %}{% endif %}">
+        <button type="button" class="btn btn-purple">Generate</button>
+    </a>
+    {% if form.instance.pk %}
+        <a href="{% url 'lyricsnest:delete-song' pk=form.instance.pk %}" onclick="return confirm('Delete this lyrics ?')">
+            <button type="button" class="btn btn-red">Delete</button>
+        </a>
+    {% endif %}
+</form>
+
+        
+        
+{% endblock %}

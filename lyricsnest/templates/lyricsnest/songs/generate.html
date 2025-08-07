@@ -1,0 +1,67 @@
+{% extends "lyricsnest/base.html" %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<h2 class="text-3xl font-semibold mb-5">Generate your lyrics</h2>
+
+<div class="px-2 mb-5 flex">
+    <a href="{% url 'lyricsnest:dashboard' %}">
+        <button class="btn btn-gray">Back to dashboard</button>
+    </a>
+</div>
+
+<div class="flex flex-col md:flex-row w-full justify-between">
+    <div class="md:w-5/12">
+        <!-- FORMULAIRE -->
+         <form class="w-full flex flex-col border-1 border-gray-200 rounded shadow p-4" method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="my-3 flex flex-col">
+                    <label for='id_{{ field.name }}' class="font-semibold">{{ field.label }} :</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-purple ">Generate</button>
+         </form>
+    </div>
+    <div class="md:w-5/12 border-1 border-gray-400 p-4 rounded flex flex-col">
+        <!-- RESULTAT -->
+        <div class="flex flex-col mb-3">
+            <label for="title" class="font-semibold">Title :</label>
+            <input 
+                type="text"
+                id="title"
+                name="title"
+                value="{% if song %}{{song.title}}{% endif %}"
+                class="border-1 border-gray-200 p-2"
+                placeholder="Generated title will be filled here"
+            />
+        </div>
+        <div class="flex flex-col h-full">
+            <label for="lyrics" class="font-semibold">Lyrics :</label>
+            <textarea 
+                id="lyrics"
+                name="lyrics"
+                style="resize: none"
+                class="border-1 border-gray-200 p-2 h-full"
+                placeholder="Generated lyrics will be filled here"
+                value="{% if response|length > 0 %}{{ response }}{% endif %}"
+            ></textarea>
+        </div>
+        <!-- OU faire deux boutons : créer nouvelle (dispo tt le temps) ou modifier existante (si song)-->
+        <div class="flex justify-between mt-3">
+            <form action="{% url 'lyricsnest:generate' %}" method="POST">
+                <!-- Créer des input cachés ? les lier via JS avec ceux ci-dessus avec un onchange ? -->
+                <button class="btn btn-blue">Save {% if song %}as new{% endif %}</button>
+            </form>
+            {% if song %}
+                <form action="{% url 'lyricsnest:edit-generate' pk=song.id %}" method="POST">
+                    <button class="btn btn-green">Save as update</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

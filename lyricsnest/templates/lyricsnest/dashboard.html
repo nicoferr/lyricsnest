@@ -1,4 +1,4 @@
-{% extends "mylyrics/base.html" %}
+{% extends "lyricsnest/base.html" %}
 
 {% block content %}
     
@@ -6,31 +6,31 @@
         <div class="flex flex-col bg-gray-50 border-1 border-gray-300 rounded-lg p-4 w-3xs items-center justify-between mx-5">
             <h1 class="text-lg font-semibold my-2">Import lyrics</h1>
             <span class="text-center text-gray-600 my-4">Import a text file with your existing lyrics</span>
-            <form class="flex flex-col w-full my-2" method="POST" action="{% url 'mylyrics:import' %}" enctype="multipart/form-data">
+            <form class="flex flex-col w-full my-2" method="POST" action="{% url 'lyricsnest:import' %}" enctype="multipart/form-data">
                 {% csrf_token %}
-                <label for="file" class="flex justify-center w-full bg-gray-300 hover:bg-gray-400 hover:text-white rounded-xs cursor-pointer py-2">Select file</label>
+                <label for="file" class="flex justify-center w-full btn btn-gray">Select file</label>
                 <span id="filename" class="w-full text-ellipsis"></span>
                 <input type="file" id="file" name="file" class="hidden" accept=".txt" />
                 <button id="import-btn"
-                    class="hidden w-full bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
+                    class="hidden w-full btn btn-blue"
                 >Import</button>
             </form>
         </div>
         <div class="flex flex-col bg-gray-50 border-1 border-gray-300 rounded-lg p-4 w-3xs items-center justify-between mx-5">
             <h1 class="text-lg font-semibold my-2">Write your own lyrics</h1>
             <span class="text-center text-gray-600 my-4">Write your own lyrics, you can still complete them with IA</span>
-            <a href="{% url 'mylyrics:create-song' %}" class="w-full my-2">
+            <a href="{% url 'lyricsnest:create-song' %}" class="w-full my-2">
                 <button 
-                    class="w-full bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
+                    class="w-full btn btn-blue"
                 >Write yourself</button>
             </a>
         </div>
         <div class="flex flex-col bg-gray-50 border-1 border-gray-300 rounded-lg p-4 w-3xs items-center justify-between mx-5">
             <h1 class="text-lg font-semibold my-2">Generat with AI</h1>
             <span class="text-center text-gray-600 my-4">Give a global or precise context and parameters, and let the AI generate the perfect lyrics</span>
-            <a href="{% url 'mylyrics:generate' %}" class="w-full my-2">
+            <a href="{% url 'lyricsnest:generate' %}" class="w-full my-2">
                 <button 
-                    class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
+                    class="w-full btn btn-purple"
                 >Generate</button>
             </a>
         </div>
@@ -40,7 +40,7 @@
         <h1 class="text-3xl font-semibold mb-10 mx-5">Latest lyrics</h1>
         <div class="w-full flex">
             {% for song in songs %}
-                <a href="{% url 'mylyrics:edit-song' pk=song.id %}" class="mx-5 flex items-stretch hover:shadow">
+                <a href="{% url 'lyricsnest:edit-song' pk=song.id %}" class="mx-5 flex items-stretch hover:shadow">
                     <div class="flex flex-col border-1 border-gray-300 rounded bg-gray-50 p-4 w-3xs">
                         <span class="text-lg font-semibold mb-5">
                             {{ song.title }}
@@ -49,8 +49,8 @@
                             {{ song.lyrics | slice:":80" | linebreaksbr }} [...]
                         </div>
                         <!-- <div class="flex items-center justify-end mt-4">
-                            <a href="{% url 'mylyrics:edit-song' pk=song.id %}"><button class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer">Edit</button></a>
-                            <a href="{% url 'mylyrics:delete-song' pk=song.id %}" onclick="return confirm('Delete this lyrics ?')"><button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer">Delete</button></a>
+                            <a href="{% url 'lyricsnest:edit-song' pk=song.id %}"><button class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer">Edit</button></a>
+                            <a href="{% url 'lyricsnest:delete-song' pk=song.id %}" onclick="return confirm('Delete this lyrics ?')"><button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer">Delete</button></a>
                         </div> -->
                     </div>
                 </a>
@@ -70,9 +70,9 @@
         
         const importBtn = document.getElementById('import-btn')
         if (e.target.files.length > 0) {
-            importBtn.style.display = 'block'
+            importBtn.classList.remove('hidden')
         } else {
-            importBtn.style.display = 'hidden'
+            importBtn.classList.add('hidden')
         }
     })
 </script>

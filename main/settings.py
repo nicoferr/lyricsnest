@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'mylyrics.apps.MylyricsConfig',
+    'lyricsnest.apps.LyricsNestConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -141,9 +141,9 @@ if DEBUG:
     NPM_BIN_PATH = 'npm.cmd'
 
 # AUTH
-LOGIN_URL = "mylyrics:login"
-LOGIN_REDIRECT_URL = "mylyrics:dashboard"
-LOGOUT_REDIRECT_URL = "mylyrics:login"
+LOGIN_URL = "lyricsnest:login"
+LOGIN_REDIRECT_URL = "lyricsnest:dashboard"
+LOGOUT_REDIRECT_URL = "lyricsnest:login"
 
 
 # STYLE

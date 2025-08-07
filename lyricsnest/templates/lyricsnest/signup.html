@@ -1,4 +1,4 @@
-{% extends 'mylyrics/base.html' %}
+{% extends 'lyricsnest/base.html' %}
 {% load widget_tweaks %}
 
 {% block content %}
@@ -16,7 +16,7 @@
                 {% endfor %}
             </div>
         {% endfor %}
-        <div class="text-blue-500 mb-4"><a href='{% url "mylyrics:login" %}'>Already have an account ? Log in here</a></div>
+        <div class="text-blue-500 mb-4"><a href='{% url "lyricsnest:login" %}'>Already have an account ? Log in here</a></div>
         
         
         <button 

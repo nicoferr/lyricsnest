@@ -3,27 +3,27 @@
     <h1 class="text-3xl font-bold">LyricsNest</h1>
     
     <div class="flex items-center justify-end w-full">
-        <a  href="{% url 'mylyrics:home' %}"
+        <a  href="{% url 'lyricsnest:home' %}"
             class="{% if request.resolver_match.url_name == 'home' %}bg-blue-200{% endif %} rounded-xs font-semibold p-2 mx-4"    
         >Home</a>
 
         {% if user.is_authenticated %}
         
-            <a  href="{% url 'mylyrics:dashboard' %}"
+            <a  href="{% url 'lyricsnest:dashboard' %}"
                 class="{% if request.resolver_match.url_name == 'dashboard' %}bg-blue-200{% endif %} rounded-xs font-semibold p-2 mx-4"    
             >Dashboard</a>
 
-            <form method="post" action="{% url 'mylyrics:logout' %}">
+            <form method="post" action="{% url 'lyricsnest:logout' %}">
                 {% csrf_token %}
                 <button 
                     class="font-semibold p-2 rounded-xs cursor-pointer p-2 mx-2"
                 >Logout</button>
             </form>
         {% else %}
-            <a  href="{% url 'mylyrics:signup' %}"
+            <a  href="{% url 'lyricsnest:signup' %}"
                 class="{% if request.resolver_match.url_name == 'signup' %}bg-blue-200{% endif %} rounded-xs font-semibold p-2 mx-4"    
             >Sign up</a>
-            <a href="{% url 'mylyrics:login' %}"
+            <a href="{% url 'lyricsnest:login' %}"
                 class="{% if request.resolver_match.url_name == 'login' %}bg-blue-200{% endif %} rounded-xs font-semibold p-2 mx-4"    
             >Log in</a>
         {% endif %}

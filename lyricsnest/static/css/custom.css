@@ -1,0 +1,23 @@
+.btn {
+    @apply text-white font-bold p-2 px-4 rounded cursor-pointer;
+}
+
+.btn-blue {
+    @apply bg-blue-400 hover:bg-blue-500;
+}
+
+.btn-green {
+    @apply bg-green-500 hover:bg-green-700;
+}
+
+.btn-purple {
+    @apply bg-purple-500 hover:bg-purple-600;
+}
+
+.btn-red {
+    @apply bg-red-500 hover:bg-red-700;
+}
+
+.btn-gray {
+    @apply bg-gray-300 hover:bg-gray-400 text-gray-600 hover:text-white;
+}

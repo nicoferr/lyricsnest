@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mylyrics', '0002_song_user_alter_song_created_at'),
+        ('lyricsnest', '0002_song_user_alter_song_created_at'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
