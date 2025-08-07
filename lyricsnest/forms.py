@@ -7,12 +7,6 @@ class SongForm(forms.ModelForm):
         fields = ['title', 'lyrics']
 
 class GenerateForm(forms.Form):
-    genres = forms.ChoiceField(
-        label="Select a musical genre",
-        widget=forms.Select(attrs={
-            'class': 'border-1 border-gray-200 p-2'
-        })
-    )
     context = forms.CharField(
         max_length=500,
         widget=forms.Textarea(attrs={
@@ -24,7 +18,16 @@ class GenerateForm(forms.Form):
             'class': 'border-1 border-gray-200 p-2',
         })
     )
+    genres = forms.ChoiceField(
+        required = False,
+        label="Select a musical genre (optional)",
+        widget=forms.Select(attrs={
+            'class': 'border-1 border-gray-200 p-2'
+        })
+    )
     lyrics = forms.CharField(
+        label="Lyrics (optional)",
+        required=False,
         max_length=1000,
         widget=forms.Textarea(attrs={
             'rows': 5,

@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -149,3 +152,6 @@ LOGOUT_REDIRECT_URL = "lyricsnest:login"
 # STYLE
 TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = ["127.0.0.1"]
+
+# TOGETHER API for AI
+TOGETHER_API_KEY= os.getenv("TOGETHER_API_KEY")

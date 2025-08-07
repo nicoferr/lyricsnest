@@ -15,5 +15,7 @@ urlpatterns = [
     path('songs/<int:pk>/delete', login_required(views.delete_song), name="delete-song"),
     path('import/', login_required(views.import_lyrics), name="import"),
     path('generate/', login_required(views.generate), name="generate"),
-    path('generate/<int:pk>', login_required(views.generate), name="edit-generate")
+    path('generate/<int:pk>', login_required(views.generate), name="edit-generate"),
+    path('save-lyrics/', login_required(views.save_lyrics), name="save"),
+    path('update-lyrics/<int:pk>', login_required(views.edit_lyrics), name="update"),
 ]

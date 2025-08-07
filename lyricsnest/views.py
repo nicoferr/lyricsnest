@@ -7,13 +7,29 @@ from django.utils import timezone
 from django.urls import reverse
 from .models import Song
 from .forms import SongForm, GenerateForm
-from langchain_ollama import ChatOllama
-from langchain.schema import HumanMessage
 import re
+from django.conf import settings
+from together import Together
+
+TOGETHER_API_URL = "https://api.together.xyz/v1/completions"
 
 # Create your views here.
 def index(request):
     return render(request, template_name="lyricsnest/index.html")
+
+def invokeAI(prompt):
+    client = Together()
+
+    return client.chat.completions.create(
+                model="mistralai/Mistral-Small-24B-Instruct-2501", # ou tout autre modèle disponible
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+            ).choices[0].message.content.strip()
+     
 
 def signup(request):
     if request.method == "POST":
@@ -119,6 +135,8 @@ def generate(request, pk=None):
         form.fields['lyrics'].initial = song.lyrics[:2000]
 
     response = ""
+    ai_lyrics = ""
+    ai_title = ""
     if request.method == 'POST':
         prompt = f"""
             You are a song writer. Write lyrics with the following instructions :
@@ -130,9 +148,36 @@ def generate(request, pk=None):
             - Lyrics to complete : {request.POST.get('lyrics')}
             - Don't answer anything else other than the lyrics
         """
+        ai_lyrics = invokeAI(prompt=prompt)
 
-        llm = ChatOllama(model='mistral')
-        response = llm([HumanMessage(content=prompt)]).content
+        title_prompt = f"Find a title for the following lyrics: {response}"
+        if song:
+            ai_title = song.title
+        else:
+            ai_title = invokeAI(title_prompt)
 
-    return render(request, 'lyricsnest/songs/generate.html', { 'song': song, 'form': form, 'ai_response': response })
+    return render(request, 'lyricsnest/songs/generate.html', { 'song': song, 'form': form, 'ai_lyrics': ai_lyrics, 'ai_title': ai_title })
 
+@login_required
+def save_lyrics(request):
+    if request.method == 'POST':
+        song = Song(
+            title=request.POST.get("title"),
+            lyrics=request.POST.get("lyrics")
+        )
+        song.user = request.user
+        song.save()
+
+    return redirect("lyricsnest:dashboard")
+
+@login_required
+def edit_lyrics(request, pk):
+    if request.method == 'POST':
+        song = get_object_or_404(Song, pk=pk)
+        song.title = request.POST.get('update-title')
+        song.lyrics = request.POST.get('update-lyrics')
+        song.user = request.user
+
+        song.save()
+
+    return redirect('lyricsnest:dashboard')

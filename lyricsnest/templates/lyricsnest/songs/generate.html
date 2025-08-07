@@ -12,56 +12,113 @@
     </a>
 </div>
 
+<div id="loading-message" class="hidden p-4 mb-5 flex bg-blue-200 rounded shadow border-1 border-blue-400">
+    Please wait... AI is generating your lyrics...
+</div>
+
 <div class="flex flex-col md:flex-row w-full justify-between">
     <div class="md:w-5/12">
-        <!-- FORMULAIRE -->
-         <form class="w-full flex flex-col border-1 border-gray-200 rounded shadow p-4" method="POST">
+         <form id="lyrics-form" class="w-full flex flex-col border-1 border-gray-200 rounded shadow p-4" method="POST">
             {% csrf_token %}
             {% for field in form %}
                 <div class="my-3 flex flex-col">
                     <label for='id_{{ field.name }}' class="font-semibold">{{ field.label }} :</label>
                     {{ field }}
+                    {% if field.name == "context" %}
+                        <div class="flex justify-end text-xs"><span id="context-number" class="mr-1">500</span>characters left</div>
+                    {% endif %}
+                    {% if field.name == "lyrics" %}
+                        <div class="flex justify-end text-xs"><span id="lyrics-number" class="mr-1">1000</span>characters left</div>
+                    {% endif %}
                 </div>
             {% endfor %}
             <button type="submit" class="btn btn-purple ">Generate</button>
          </form>
     </div>
     <div class="md:w-5/12 border-1 border-gray-400 p-4 rounded flex flex-col">
-        <!-- RESULTAT -->
         <div class="flex flex-col mb-3">
-            <label for="title" class="font-semibold">Title :</label>
+            <label for="generated-title" class="font-semibold">Title :</label>
             <input 
                 type="text"
-                id="title"
-                name="title"
-                value="{% if song %}{{song.title}}{% endif %}"
+                id="generated-title"
+                name="generated-title"
+                value="{% if ai_lyrics|length > 0 %}{{ai_lyrics}}{% endif %}"
                 class="border-1 border-gray-200 p-2"
                 placeholder="Generated title will be filled here"
             />
         </div>
         <div class="flex flex-col h-full">
-            <label for="lyrics" class="font-semibold">Lyrics :</label>
+            <label for="generated-lyrics" class="font-semibold">Lyrics :</label>
             <textarea 
-                id="lyrics"
-                name="lyrics"
+                id="generated-lyrics"
+                name="generated-lyrics"
                 style="resize: none"
                 class="border-1 border-gray-200 p-2 h-full"
                 placeholder="Generated lyrics will be filled here"
-                value="{% if response|length > 0 %}{{ response }}{% endif %}"
-            ></textarea>
+            >{% if ai_lyrics|length > 0 %}{{ ai_lyrics }}{% endif %}</textarea>
         </div>
         <!-- OU faire deux boutons : créer nouvelle (dispo tt le temps) ou modifier existante (si song)-->
         <div class="flex justify-between mt-3">
-            <form action="{% url 'lyricsnest:generate' %}" method="POST">
-                <!-- Créer des input cachés ? les lier via JS avec ceux ci-dessus avec un onchange ? -->
+            <form action="{% url 'lyricsnest:save' %}" method="POST" id="save-form">
+                {% csrf_token %}
+                <input type="hidden" id="title" name="title" />
+                <textarea class="hidden" id="lyrics" name="lyrics"></textarea>
                 <button class="btn btn-blue">Save {% if song %}as new{% endif %}</button>
             </form>
             {% if song %}
-                <form action="{% url 'lyricsnest:edit-generate' pk=song.id %}" method="POST">
+                <form action="{% url 'lyricsnest:update' pk=song.id %}" method="POST" id="edit-form">
+                    {% csrf_token %}
+                    <input type="hidden" id="update-title" name="update-title" />
+                    <textarea class="hidden" id="update-lyrics" name="update-lyrics"></textarea>
                     <button class="btn btn-green">Save as update</button>
                 </form>
             {% endif %}
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function refreshChars(target, id, max) {
+        let length = target.value.length
+
+        document.getElementById(id).innerHTML = max - length
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let context = document.getElementById('id_context')
+        let lyrics = document.getElementById('id_lyrics')
+        refreshChars(context, 'context-number', 500);
+        refreshChars(lyrics, 'lyrics-number', 1000)
+    });
+
+    document.getElementById('id_context').addEventListener('input', (e) => {
+        refreshChars(e.target, 'context-number', 500)
+    })
+    document.getElementById('id_lyrics').addEventListener('input', (e) => {
+        refreshChars(e.target, 'lyrics-number', 1000)
+    })
+
+    document.getElementById('lyrics-form').addEventListener('submit', () => {
+        let loading = document.getElementById('loading-message')
+        loading.classList.remove("hidden")
+    })
+
+    document.getElementById('save-form').addEventListener('submit', (e) => {
+        e.preventDefault()
+        document.getElementById('title').value = document.getElementById('generated-title').value
+        document.getElementById('lyrics').innerHTML = document.getElementById('generated-lyrics').innerHTML
+
+        document.getElementById('save-form').submit()
+    })
+
+    document.getElementById('edit-form').addEventListener('submit', (e) => {
+        e.preventDefault()
+        document.getElementById('update-title').value = document.getElementById('generated-title').value
+        document.getElementById('update-lyrics').innerHTML = document.getElementById('generated-lyrics').innerHTML
+
+        document.getElementById('edit-form').submit()
+    })
+</script>
 {% endblock %}
