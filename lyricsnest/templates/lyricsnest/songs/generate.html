@@ -21,14 +21,14 @@
          <form id="lyrics-form" class="w-full flex flex-col border-1 border-gray-200 rounded shadow p-4" method="POST">
             {% csrf_token %}
             {% for field in form %}
-                <div class="my-3 flex flex-col">
+                <div class="my-3 flex {% if field.name != 'generate_title' %}flex-col{% endif %}">
                     <label for='id_{{ field.name }}' class="font-semibold">{{ field.label }} :</label>
                     {{ field }}
                     {% if field.name == "context" %}
                         <div class="flex justify-end text-xs"><span id="context-number" class="mr-1">500</span>characters left</div>
                     {% endif %}
                     {% if field.name == "lyrics" %}
-                        <div class="flex justify-end text-xs"><span id="lyrics-number" class="mr-1">1000</span>characters left</div>
+                        <div class="flex justify-end text-xs"><span id="lyrics-number" class="mr-1">1500</span>characters left</div>
                     {% endif %}
                 </div>
             {% endfor %}
@@ -42,7 +42,7 @@
                 type="text"
                 id="generated-title"
                 name="generated-title"
-                value="{% if ai_lyrics|length > 0 %}{{ai_lyrics}}{% endif %}"
+                value="{% if ai_title|length > 0 %}{{ai_title}}{% endif %}"
                 class="border-1 border-gray-200 p-2"
                 placeholder="Generated title will be filled here"
             />
@@ -90,14 +90,14 @@
         let context = document.getElementById('id_context')
         let lyrics = document.getElementById('id_lyrics')
         refreshChars(context, 'context-number', 500);
-        refreshChars(lyrics, 'lyrics-number', 1000)
+        refreshChars(lyrics, 'lyrics-number', 1500)
     });
 
     document.getElementById('id_context').addEventListener('input', (e) => {
         refreshChars(e.target, 'context-number', 500)
     })
     document.getElementById('id_lyrics').addEventListener('input', (e) => {
-        refreshChars(e.target, 'lyrics-number', 1000)
+        refreshChars(e.target, 'lyrics-number', 1500)
     })
 
     document.getElementById('lyrics-form').addEventListener('submit', () => {

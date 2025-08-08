@@ -8,7 +8,7 @@ from django.urls import reverse
 from .models import Song
 from .forms import SongForm, GenerateForm
 import re
-from django.conf import settings
+from django.conf import global_settings
 from together import Together
 
 TOGETHER_API_URL = "https://api.together.xyz/v1/completions"
@@ -16,6 +16,9 @@ TOGETHER_API_URL = "https://api.together.xyz/v1/completions"
 # Create your views here.
 def index(request):
     return render(request, template_name="lyricsnest/index.html")
+
+def custom_page_not_found_view(request, exception):
+    return render(request, "lyricsnest/404.html", status=404)
 
 def invokeAI(prompt):
     client = Together()
@@ -131,8 +134,12 @@ def generate(request, pk=None):
         ('Reggaeton','Reggaeton'),
         ('Rock','Rock'),
     ]
+
+    languages = global_settings.LANGUAGES
+    sorted_languages = sorted(languages, key=lambda x: x[1].capitalize())
+    form.fields['language'].choices = [("", None)] + [(code,name) for code,name in sorted_languages]
     if song:
-        form.fields['lyrics'].initial = song.lyrics[:2000]
+        form.fields['lyrics'].initial = song.lyrics[:1500]
 
     response = ""
     ai_lyrics = ""
@@ -146,15 +153,16 @@ def generate(request, pk=None):
             - Genre : {request.POST.get('genres')} 
             - Lyrics context : {request.POST.get('context')}
             - Lyrics to complete : {request.POST.get('lyrics')}
+            - Lyrics language : {request.POST.get('language')}
             - Don't answer anything else other than the lyrics
         """
         ai_lyrics = invokeAI(prompt=prompt)
 
-        title_prompt = f"Find a title for the following lyrics: {response}"
-        if song:
+        title_prompt = f"Find a title for the following lyrics: {ai_lyrics} # Instructions : Don't answer anything else other than the title, without quotes"
+        if song and not request.POST.get("generate_title"):
             ai_title = song.title
         else:
-            ai_title = invokeAI(title_prompt)
+            ai_title = invokeAI(title_prompt).replace('"', '')
 
     return render(request, 'lyricsnest/songs/generate.html', { 'song': song, 'form': form, 'ai_lyrics': ai_lyrics, 'ai_title': ai_title })
 
