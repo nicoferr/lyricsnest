@@ -120,31 +120,15 @@ def generate(request, pk=None):
         song = get_object_or_404(Song, pk=pk)
 
     form = GenerateForm()
-    form.fields['genres'].choices = [
-        ('', 'None'),
-        ('Country','Country'),
-        ('Hip-Hop/Rap','Hip-Hop/Rap'),
-        ('Jazz','Jazz'),
-        ('Metal','Metal'),
-        ('Pop','Pop'),
-        ('Pop-Punk','Pop-Punk'),
-        ('Punk','Punk'),
-        ('R&B/Soul','R&B/Soul'),
-        ('Reggae','Reggae'),
-        ('Reggaeton','Reggaeton'),
-        ('Rock','Rock'),
-    ]
 
-    languages = global_settings.LANGUAGES
-    sorted_languages = sorted(languages, key=lambda x: x[1].capitalize())
-    form.fields['language'].choices = [("", None)] + [(code,name) for code,name in sorted_languages]
     if song:
         form.fields['lyrics'].initial = song.lyrics[:1500]
 
-    response = ""
     ai_lyrics = ""
     ai_title = ""
     if request.method == 'POST':
+        form = GenerateForm(request.POST)
+
         prompt = f"""
             You are a song writer. Write lyrics with the following instructions :
 
@@ -163,6 +147,25 @@ def generate(request, pk=None):
             ai_title = song.title
         else:
             ai_title = invokeAI(title_prompt).replace('"', '')
+
+    form.fields['genres'].choices = [
+        ('', 'None'),
+        ('Country','Country'),
+        ('Hip-Hop/Rap','Hip-Hop/Rap'),
+        ('Jazz','Jazz'),
+        ('Metal','Metal'),
+        ('Pop','Pop'),
+        ('Pop-Punk','Pop-Punk'),
+        ('Punk','Punk'),
+        ('R&B/Soul','R&B/Soul'),
+        ('Reggae','Reggae'),
+        ('Reggaeton','Reggaeton'),
+        ('Rock','Rock'),
+    ]
+    
+    languages = global_settings.LANGUAGES
+    sorted_languages = sorted(languages, key=lambda x: x[1].capitalize())
+    form.fields['language'].choices = [("", None)] + [(code,name) for code,name in sorted_languages]
 
     return render(request, 'lyricsnest/songs/generate.html', { 'song': song, 'form': form, 'ai_lyrics': ai_lyrics, 'ai_title': ai_title })
 

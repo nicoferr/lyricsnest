@@ -5,7 +5,7 @@
 
 {% block content %}
 <h2 class="text-3xl font-semibold">{{ form.instance.pk|yesno:'Update,Create' }} your lyrics</h2>
-<form method="post" action="{{ form_action }}">
+<form method="post" action="{{ form_action }}" class="m-5 w-8/10">
     {% csrf_token %}
     {% for field in form %}
         <div class="mb-4">
@@ -17,23 +17,25 @@
         </div>
     {% endfor %}
 
-    <button 
-        class="btn btn-green"
-    >{{ form.instance.pk|yesno:'Update,Create' }}</button>
-    
-    <a href="{% url 'lyricsnest:dashboard' %}">
-        <button type="button"
-            class="btn btn-blue"
-        >Cancel</button>
-    </a>
-    <a href="{% if form.instance.pk %}{% url 'lyricsnest:edit-generate' pk=form.instance.pk %}{% else %}{% url 'lyricsnest:generate' %}{% endif %}">
-        <button type="button" class="btn btn-purple">Generate</button>
-    </a>
-    {% if form.instance.pk %}
-        <a href="{% url 'lyricsnest:delete-song' pk=form.instance.pk %}" onclick="return confirm('Delete this lyrics ?')">
-            <button type="button" class="btn btn-red">Delete</button>
+    <div id="btns" class="flex items-center justify-center">
+        <button 
+            class="btn btn-green mx-3"
+        >{{ form.instance.pk|yesno:'Update,Create' }}</button>
+        
+        <a href="{% url 'lyricsnest:dashboard' %}">
+            <button type="button"
+                class="btn btn-blue mx-3"
+            >Cancel</button>
         </a>
-    {% endif %}
+        <a href="{% if form.instance.pk %}{% url 'lyricsnest:edit-generate' pk=form.instance.pk %}{% else %}{% url 'lyricsnest:generate' %}{% endif %}">
+            <button type="button" class="btn btn-purple mx-3">Generate</button>
+        </a>
+        {% if form.instance.pk %}
+            <a href="{% url 'lyricsnest:delete-song' pk=form.instance.pk %}" onclick="return confirm('Delete this lyrics ?')">
+                <button type="button" class="btn btn-red mx-3">Delete</button>
+            </a>
+        {% endif %}
+    </div>
 </form>
 
         

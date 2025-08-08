@@ -5,6 +5,10 @@ class SongForm(forms.ModelForm):
     class Meta:
         model = Song
         fields = ['title', 'lyrics']
+        widgets = {
+            # 'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'lyrics': forms.Textarea(attrs={'rows': '20'}),
+        }
 
 class GenerateForm(forms.Form):
     context = forms.CharField(
