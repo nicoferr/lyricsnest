@@ -19,5 +19,9 @@
 }
 
 .btn-gray {
-    @apply bg-gray-300 hover:bg-gray-400 text-gray-600 hover:text-white;
+    @apply bg-gray-300 bg-gray-400 hover:bg-gray-800 hover:text-white;
+}
+
+.card {
+    @apply flex flex-col px-8 py-4 border-1 border-gray-200 rounded m-3 text-justify shadow;
 }
