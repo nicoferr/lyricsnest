@@ -31,6 +31,13 @@ DEBUG = False
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(",")
 
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost', 'https://lyricsnest.net', 'https://www.lyricsnest.net']
+
+CSRF_COOKIE_SECURE = True  # True si HTTPS
+SESSION_COOKIE_SECURE = True  # True si HTTPS
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -166,5 +173,20 @@ TOGETHER_API_KEY= os.getenv("TOGETHER_API_KEY")
 # FOR TAILWIND BUILD IN LOCAL
 NPM_BIN_PATH = '/usr/bin/npm' # linux / Docker
 # NPM_BIN_PATH = r'C:\Program Files\nodejs\npm.cmd' # windows
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+
 
 
