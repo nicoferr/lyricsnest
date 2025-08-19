@@ -1,24 +1,28 @@
-# Étape 1 : Choisir l'image de base
 FROM python:3.11-slim
 
-# Étape 2 : Empêcher Python de créer des fichiers .pyc
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# Étape 3 : Installer les dépendances système
+# Installer dépendances système
 RUN apt-get update && apt-get install -y \
-    libpq-dev gcc \
+    build-essential libpq-dev curl \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Étape 4 : Définir le répertoire de travail
+# Créer répertoire de l’app
 WORKDIR /app
 
-# Étape 5 : Installer les dépendances Python
+# Installer requirements
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Étape 6 : Copier le code du projet
+# Copier le projet
 COPY . /app/
 
-# Étape 7 : Commande par défaut (modifiable via docker-compose)
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "mon_projet.wsgi:application"]
+# Initialiser tailwind
+RUN python manage.py tailwind install \
+    && python manage.py tailwind build
+
+# Collecter les fichiers statiques
+RUN python manage.py collectstatic --noinput
+
+# Commande par défaut : lancer Gunicorn
+CMD ["gunicorn", "main.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
