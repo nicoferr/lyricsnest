@@ -17,7 +17,7 @@ py manage.py migrate
 # Install tailwindcss dependencies
 py manage.py tailwind install
 
-# Launch server
+# Launch server for test
 py manage.py runserver
 
 # Launch tailwindcss
@@ -32,3 +32,9 @@ You need an account and an API Key (you have a few credits for free but then you
 Create an **.env** file from **.env.example** and put your API Key there.
 
 You can go to Together AI website to see which AI models are available and replace the **model=** parameter in the **invokeAI()** function in **lyricsnest/views.py**
+
+
+## Deployment
+```
+docker compose up -d
+```

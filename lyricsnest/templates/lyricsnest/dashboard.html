@@ -2,8 +2,8 @@
 
 {% block content %}
     
-    <div class="w-full flex space-between items-align justify-center mb-15">
-        <div class="flex flex-col bg-gray-50 border-1 border-gray-300 rounded-lg p-4 w-3xs items-center justify-between mx-5">
+    <div class="w-full flex flex-col max-md:gap-6 md:flex-row md:space-between items-align justify-center mb-15">
+        <div class="flex flex-col bg-gray-50 border-1 border-gray-300 rounded-lg p-4 md:w-3xs items-center justify-between mx-5">
             <h1 class="text-lg font-semibold my-2">Import lyrics</h1>
             <span class="text-center text-gray-600 my-4">Import a text file with your existing lyrics</span>
             <form class="flex flex-col w-full my-2" method="POST" action="{% url 'lyricsnest:import' %}" enctype="multipart/form-data">
@@ -27,7 +27,7 @@
                 </button>
             </form>
         </div>
-        <div class="flex flex-col bg-gray-50 border-1 border-gray-300 rounded-lg p-4 w-3xs items-center justify-between mx-5">
+        <div class="flex flex-col bg-gray-50 border-1 border-gray-300 rounded-lg p-4 md:w-3xs items-center justify-between mx-5">
             <h1 class="text-lg font-semibold my-2">Write your own lyrics</h1>
             <span class="text-center text-gray-600 my-4">Write your own lyrics, you can still complete them with IA</span>
             <a href="{% url 'lyricsnest:create-song' %}" class="w-full my-2">
@@ -41,7 +41,7 @@
                 </button>
             </a>
         </div>
-        <div class="flex flex-col bg-gray-50 border-1 border-gray-300 rounded-lg p-4 w-3xs items-center justify-between mx-5">
+        <div class="flex flex-col bg-gray-50 border-1 border-gray-300 rounded-lg p-4 md:w-3xs items-center justify-between mx-5">
             <h1 class="text-lg font-semibold my-2">Generat with AI</h1>
             <span class="text-center text-gray-600 my-4">Give a global or precise context and parameters, and let the AI generate the perfect lyrics</span>
             <a href="{% url 'lyricsnest:generate' %}" class="w-full my-2">
@@ -62,10 +62,10 @@
 
     <div class="w-full flex flex-col mb-15">
         <h1 class="text-3xl font-semibold mb-10 mx-5">Latest lyrics</h1>
-        <div class="w-full flex">
+        <div class="w-full max-md:gap-6 flex flex-col md:flex-row mb-15">
             {% for song in songs %}
                 <a href="{% url 'lyricsnest:edit-song' pk=song.id %}" class="mx-5 flex items-stretch hover:shadow">
-                    <div class="flex flex-col border-1 border-gray-300 rounded bg-gray-50 p-4 w-3xs">
+                    <div class="flex flex-col border-1 border-gray-300 rounded bg-gray-50 p-4 w-full md:w-3xs">
                         <span class="text-lg font-semibold mb-5">
                             {{ song.title }}
                         </span>

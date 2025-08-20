@@ -27,7 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-w0_u0+45g#-0aen+=vbda5!sx(*8luo+_r9=h$nc!2_rs3^n6-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
+# FOR TAILWIND BUILD IN LOCAL
+# NPM_BIN_PATH = '/usr/bin/npm' # linux / Docker
+NPM_BIN_PATH = r'C:\Program Files\nodejs\npm.cmd' # windows
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(",")
 
@@ -169,10 +172,6 @@ INTERNAL_IPS = ["127.0.0.1"]
 
 # TOGETHER API for AI
 TOGETHER_API_KEY= os.getenv("TOGETHER_API_KEY")
-
-# FOR TAILWIND BUILD IN LOCAL
-NPM_BIN_PATH = '/usr/bin/npm' # linux / Docker
-# NPM_BIN_PATH = r'C:\Program Files\nodejs\npm.cmd' # windows
 
 LOGGING = {
     'version': 1,

@@ -21,5 +21,14 @@
         </section>
     </div>
     {% block scripts %}{% endblock %}
+    <script>
+        let navBars = document.getElementById('nav-bars');
+
+        if(navBars) {
+            navBars.addEventListener('click', () => {
+                document.getElementById('nav-div').classList.toggle('hidden');
+            })
+        }
+    </script>
 </body>
 </html>
